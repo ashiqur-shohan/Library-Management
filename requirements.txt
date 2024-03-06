@@ -1,0 +1,12 @@
+asgiref==3.7.2
+crispy-bootstrap5==2024.2
+Django==5.0.1
+django-crispy-forms==2.1
+django-email==0.1.10
+django-environ==0.11.2
+django-phonenumber-field==7.3.0
+phonenumbers==8.13.31
+pillow==10.2.0
+psycopg2==2.9.9
+sqlparse==0.4.4
+tzdata==2023.4
