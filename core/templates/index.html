@@ -1,0 +1,64 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block head_title %}BookToday{% endblock %} 
+{% block content %}
+<div class="flex flex-col lg:flex-row items-center justify-between p-3 lg:p-8 m-4 lg:m-8 border rounded-xl">
+    <div class="lg:w-3/5">
+      <h1 class="text-4xl font-bold mb-6"> Your One-Stop Shop for the Perfect Read </h1>
+      <h3 class="text-xl">
+          Booktoday is your online haven for discovering and acquiring the latest and greatest books! Immerse yourself in a world of captivating fiction, thought-provoking non-fiction, and everything in between. Whether you're a seasoned bibliophile or just starting your literary journey, Booktoday offers an extensive selection to cater to your unique reading preferences.
+      </h3>
+  
+    </div>
+    
+    <img class ="h-96 mt-4 lg: mt-0" src ="{% static './cover.jpg' %}"/>
+  
+  </div> 
+
+  <h5>All Categories</h5>
+<div class="d-flex justify-content-center box-sizing">
+      {% for br in category %}
+      <button class="ms-2">
+          <button>
+            <a href='{% url 'category_wise_post' br.slug%}' class = 'text-dark text-decoration-none'> {{br.name}} </a>
+          </button>
+      </button>
+      {% endfor %}
+
+
+    </div>
+
+    <h3> {{data | length}} results found  </h3>
+
+    <div class="flex">
+      {% for item in data %}
+    <div class="max-w-sm rounded overflow-hidden shadow-lg">
+      <img class="w-full" src="{{item.image.url}}" alt="">
+      <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2"> {{item.title}} </div>
+        <p class="text-gray-700 text-base">
+          {{item.desc | truncatewords:20}}
+        </p>
+      </div>
+
+      <div class="px-6 pt-4 pb-2">
+        {% for i in item.category.all%}
+        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#{{i.name}}</span>
+        {% endfor %}
+      </div>
+      {% comment %} <button type="button" class="text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+        <a href='{% url 'book_detail' item.id%}' > 
+        Details
+      </a>
+      </button> {% endcomment %}
+      <a href="{% url 'book_detail' item.id%}" class="inline-flex items-center px-4 py-2 rounded-md bg-blue-500 text-white">
+        Details
+      </a>
+      
+    </div>
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}
