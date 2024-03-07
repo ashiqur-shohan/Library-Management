@@ -15,20 +15,19 @@
   
   </div> 
 
-  <h5>All Categories</h5>
-<div class="d-flex justify-content-center box-sizing">
-      {% for br in category %}
-      <button class="ms-2">
-          <button>
-            <a href='{% url 'category_wise_post' br.slug%}' class = 'text-dark text-decoration-none'> {{br.name}} </a>
-          </button>
-      </button>
-      {% endfor %}
-
-
-    </div>
-
-    <h3> {{data | length}} results found  </h3>
+<div class="space-y-4 my-6">
+  <h5 class="text-2xl font-bold text-center">All Categories</h5>
+  <div class="flex justify-center gap-2">
+        {% for br in category %}
+        <div class="">
+          <a href='{% url 'category_wise_post' br.slug%}' class = 'btn btn-ghost bg-gray-300' text-decoration-none'> {{br.name}} </a>
+            
+        </div>
+        {% endfor %}
+  </div>
+  
+      <h3 class="text-2xl font-bold text-center" > {{data | length}} results found  </h3>
+</div>
 
 <!-- <div class="flex justify-center">
   <div class="flex flex-wrap gap-4">
@@ -63,17 +62,22 @@
 </div>
 </div> -->
 
-<div class="flex justify-center">
-  <div class="grid grid-cols-3 gap-6">
+<div class="px-4">
+  <div class="grid grid-cols-4 gap-6">
     {% for item in data %}
   
-    <div class="card w-96 bg-base-100 shadow-xl">
-      <figure><img src="{{item.image.url}}" alt="Book pic" /></figure>
-      <div class="card-body">
+    <div class="card bg-gray-200 shadow-xl ">
+      <figure class="pt-4"><img class = "h-80 rounded-xl" src="{{item.image.url}}" alt="Book pic" /></figure>
+      <div class="card-body ">
         <h2 class="card-title">{{item.title}}</h2>
         <p>{{item.desc | truncatewords:20}}</p>
-        <div class="card-actions justify-end">
-          <button class="btn btn-primary">Buy Now</button>
+        <h3 class="text-lg font-bold ">Price : $$$ </h3>
+        <div class="card-actions">
+          <div class="badge badge-outline">Fashion</div> 
+          <div class="badge badge-outline">Products</div>
+        </div>
+        <div class="card-actions justify-center">
+          <a href="#" class="btn btn-primary">Buy Now</a>
         </div>
       </div>
     </div>
