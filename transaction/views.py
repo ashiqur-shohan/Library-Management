@@ -17,6 +17,22 @@ from user.models import BorrowHistory
 # Create your views here.
 
 
+def send_email(user, amount, email_type, mail_subject, template):
+    message = render_to_string(template, {
+        'user': user,
+        'amount': amount,
+        'type': email_type,
+    })
+    # from_email = "BOOK Today <ashiqur.cu.stat@gmail.com>"
+    to_email = user.email
+    send_email = EmailMessage(mail_subject, message, to=[to_email])
+    # send_email = EmailMultiAlternatives(
+    #     mail_subject, '', to=[user.email], from_email=from_email, reply_to=[from_email])
+    # send_email.attach_alternative(message, 'text/html')
+    send_email.send()
+
+
+
 class BookBorrowView(LoginRequiredMixin, View):
     def get(self, request, id, **kwargs):
         book = get_object_or_404(BookModel, id=id)
@@ -90,16 +106,4 @@ def deposit(request):
     return render(request, 'deposit.html')
 
 
-def send_email(user, amount, email_type, mail_subject, template):
-    message = render_to_string(template, {
-        'user': user,
-        'amount': amount,
-        'type': email_type,
-    })
-    # from_email = "BOOK Today <ashiqur.cu.stat@gmail.com>"
-    to_email = user.email
-    send_email = EmailMessage(mail_subject, message, to=[to_email])
-    # send_email = EmailMultiAlternatives(
-    #     mail_subject, '', to=[user.email], from_email=from_email, reply_to=[from_email])
-    # send_email.attach_alternative(message, 'text/html')
-    send_email.send()
+
