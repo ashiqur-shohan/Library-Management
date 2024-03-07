@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', HomeView.as_view(), name='home'),
     path('', home, name='home'),
-    path('/<slug:category_slug>/', home, name='category_wise_post'),
+    path('<slug:category_slug>/', home, name='category_wise_post'),
     path('user/', include('user.urls')),
     path('transaction/', include('transaction.urls')),
     path('book/', include('book.urls')),
