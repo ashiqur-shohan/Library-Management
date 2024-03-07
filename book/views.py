@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect ,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import BookModel
-from django.views.generic import DetailView,View,ListView
+from django.views.generic import DetailView, View, ListView
 from .forms import ReviewForm
 from user.models import BorrowHistory
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -35,11 +35,12 @@ class BookDetailsView(DetailView):
         context['review_form'] = review_form
         return context
 
+
 def borrow_book(reuqest, id):
     book_model = BookModel.objects.get(pk=id)
     acc = reuqest.user.account
     if acc.balance > book_model.price:
-        acc.balance -= book_model.price   
+        acc.balance -= book_model.price
         acc.save(
             update_fields=[
                 'balance'
@@ -54,12 +55,21 @@ def borrow_book(reuqest, id):
     return redirect('book_detail', id=id)
 
 
+def return_book(request, id):
+    borrow_book = BorrowHistory.objects.get(pk=id)
+    account = request.user.account
+    account.balance += borrow_book.user.balance
+    account.save()
+    borrow_book.delete()
+    return redirect('borrow_book_lists')
+
+
 class BorrowBookListView(LoginRequiredMixin, ListView):
     model = BorrowHistory
-    template_name = 'borrowed_book.html'
-    context_object_name= 'borrowed_books'
+    template_name = 'borrow_book.html'
+    context_object_name = 'borrowed_books'
 
     def get_queryset(self):
         user_id = self.request.user.id
-        queryset = BorrowHistory.objects.filter(user__user_id = user_id)
+        queryset = BorrowHistory.objects.filter(user__user_id=user_id)
         return queryset
