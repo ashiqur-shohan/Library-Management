@@ -1,31 +1,35 @@
 {% extends "base.html" %} {% load crispy_forms_tags %} {% block content %}
 
-<div class="col-sm-12 m-2">
+<div class="flex">
   <img src="{{object.image.url}}" class="h-auto max-w-lg rounded-lg"  />
   <div class="card">
     <div class="card-body">
+
       <h1 class="card-title">{{object.title}}</h1>
-      <h3>
-        Author : {{object.author}} 
-        </h3>
-        <div class="px-6 pt-4 pb-2">
-            {% for i in item.category.all%}
-            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#{{i.name}}</span>
-            {% endfor %}
-          </div>
-        <h2>Price : {{object.price}} Tk</h2>
-      <p class="card-text">{{object.desc}}</p>
+      <h3> Author : {{object.author}} </h3>
+
+      <div class="px-6 pt-4 pb-2">
+
+          {% for i in item.category.all%}
+
+          <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#{{i.name}}</span>
+
+          {% endfor %}
+
+        </div>
+        <h2 class='text-xl font-bold'>Price : $ {{object.price}} </h2>
+        <p class="card-text">{{object.desc}}</p>
     
-      {% if request.user.is_authenticated%}
-      
-      <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-        <a href='{% url 'borrow_book' object.id %}'>Borrow</a>
-      </button>
-      {% endif %}
+        {% if request.user.is_authenticated%}
+        <div class="card-actions ">
+          <a href="{% url 'borrow_book' object.id %}" class="btn btn-primary">Borrow</a>
+        </div>
+        {% endif %}
 
     </div>
   </div>
 </div>
+
 
 <div class="card m-2">
   <h5>Total Review : {{reviews | length}}</h5>
@@ -50,7 +54,7 @@
   </div>
 </div>
 {% endif %}
-{% comment %} {% endif %} {% endcomment %}
+
 {% endblock %} 
 
 

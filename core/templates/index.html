@@ -71,14 +71,17 @@
       <div class="card-body ">
         <h2 class="card-title">{{item.title}}</h2>
         <p>{{item.desc | truncatewords:20}}</p>
-        <h3 class="text-lg font-bold ">Price : $$$ </h3>
+        <h3 class="text-lg font-bold ">Price : {{item.price}} </h3>
         <div class="card-actions">
-          <div class="badge badge-outline">Fashion</div> 
-          <div class="badge badge-outline">Products</div>
+          {% for i in item.category.all %}
+          <div class="badge badge-outline">{{i.name}}</div>
+          {% endfor %}
         </div>
+        {% if request.user.is_authenticated%}
         <div class="card-actions justify-center">
-          <a href="#" class="btn btn-primary">Buy Now</a>
+          <a href="{% url 'book_detail' item.id%}" class="btn btn-primary">Borrow</a>
         </div>
+        {% endif %}
       </div>
     </div>
   
