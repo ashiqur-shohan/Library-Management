@@ -77,11 +77,11 @@
           <div class="badge badge-outline">{{i.name}}</div>
           {% endfor %}
         </div>
-        {% if request.user.is_authenticated%}
+        
         <div class="card-actions justify-center">
-          <a href="{% url 'book_detail' item.id%}" class="btn btn-primary">Borrow</a>
+          <a href="{% url 'book_detail' item.id%}" class="btn btn-primary">Details</a>
         </div>
-        {% endif %}
+        
       </div>
     </div>
   
