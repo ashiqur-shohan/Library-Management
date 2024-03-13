@@ -17,21 +17,6 @@ from user.models import BorrowHistory
 # Create your views here.
 
 
-def send_email(user, amount, email_type, mail_subject, template):
-    message = render_to_string(template, {
-        'user': user,
-        'amount': amount,
-        'type': email_type,
-    })
-    # from_email = "BOOK Today <ashiqur.cu.stat@gmail.com>"
-    to_email = user.email
-    send_email = EmailMessage(mail_subject, message, to=[to_email])
-    # send_email = EmailMultiAlternatives(
-    #     mail_subject, '', to=[user.email], from_email=from_email, reply_to=[from_email])
-    # send_email.attach_alternative(message, 'text/html')
-    send_email.send()
-
-
 
 class BookBorrowView(LoginRequiredMixin, View):
     def get(self, request, id, **kwargs):
@@ -67,9 +52,14 @@ class UserDepositView(CreateView):
         transaction.account = account
         transaction.amount = amount
         transaction.save()
+        email_subject = "Money Deposited."
+        email_body = render_to_string("deposite_email.html",{'user':self.request.user,'amount':amount})
+        email = EmailMultiAlternatives(email_subject,'',to=[self.request.user.email])
+        email.attach_alternative(email_body,'text/html')
+        email.send()
         messages.success(
             self.request, f'your account has been successfully depostied {amount} tk')
-        # send_email(self.request.user,amount, 'deposit', 'Deposit Successful Message', 'transactions/email_template.html')
+        
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -96,8 +86,7 @@ def deposit(request):
             account = user.account
             account.balance += deposit_amount
             account.save()
-            send_email(request.user, deposit_amount, 'deposit',
-                       'Deposit Successful Message', 'email_template.html')
+            
             return redirect('success_page')
         else:
             error_message = "Invalid deposit amount. Please enter a valid number."

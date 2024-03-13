@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import BookModel
-from django.views.generic import DetailView, View, ListView
+from django.views.generic import DetailView, ListView
 from .forms import ReviewForm
 from user.models import BorrowHistory
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from book.models import BookModel
 from user.models import BorrowHistory
-from django.utils import timezone
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 # Create your views here.
 
 
@@ -38,6 +39,7 @@ class BookDetailsView(DetailView):
 
 def borrow_book(reuqest, id):
     book_model = BookModel.objects.get(pk=id)
+    user = reuqest.user 
     acc = reuqest.user.account
     if acc.balance > book_model.price:
         acc.balance -= book_model.price
@@ -48,6 +50,11 @@ def borrow_book(reuqest, id):
         )
         history = BorrowHistory(
             book=book_model, user=acc)
+        email_subject = "Book Borrowed."
+        email_body = render_to_string("book_borrow_email.html",{'user':user,'amount':book_model.price})
+        email = EmailMultiAlternatives(email_subject,'',to=[user.email])
+        email.attach_alternative(email_body,'text/html')
+        email.send()
         history.save()
     else:
         messages.error(reuqest, 'You do not have sufficient balance')
