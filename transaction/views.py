@@ -71,28 +71,3 @@ class UserDepositView(CreateView):
         return context
 
 
-@login_required
-def deposit(request):
-    if request.method == 'POST':
-        deposit_amount = request.POST.get('deposit_amount')
-
-        if isinstance(deposit_amount, int):
-
-            if deposit_amount <= 0:
-
-                error_message = "Deposit amount must be a positive value."
-                return render(request, 'deposit.html', {'error_message': error_message})
-            user = request.user
-            account = user.account
-            account.balance += deposit_amount
-            account.save()
-            
-            return redirect('success_page')
-        else:
-            error_message = "Invalid deposit amount. Please enter a valid number."
-            return render(request, 'deposit.html', {'error_message': error_message})
-
-    return render(request, 'deposit.html')
-
-
-
